@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Minimal Restaurant Menu</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      background: #f8f8f8;
+      color: #111;
+      line-height: 1.5;
+    }
+
+    header {
+      text-align: center;
+      padding: 2rem 1rem;
+      background: #ffffff;
+      border-bottom: 1px solid #e5e5e5;
+    }
+
+    header h1 {
+      font-size: 4em;
+      margin: 0;
+      font-weight: 700;
+      letter-spacing: 1px;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: auto;
+      padding: 1rem;
+    }
+
+    .section-title {
+      margin-top: 3rem;
+      margin-bottom: 1rem;
+      font-size: 1.6rem;
+      font-weight: 600;
+      border-bottom: 2px solid #000;
+      display: inline-block;
+      padding-bottom: 0.3rem;
+    }
+
+    .menu-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.6rem;
+      margin-top: 1.5rem;
+    }
+
+    .item {
+      background: #fff;
+      border-radius: 8px;
+      overflow: hidden;
+      border: 1px solid #ddd;
+      transition: 0.2s ease;
+    }
+
+    .item:hover {
+      transform: scale(1.01);
+      border-color: #000;
+    }
+
+    .item img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+    }
+
+    .item-content {
+      padding: 1rem;
+    }
+
+    .item-title {
+      font-size: 1.2rem;
+      margin: 0;
+      font-weight: 600;
+    }
+
+    .item-desc {
+      margin: 0.5rem 0;
+      font-size: 0.9rem;
+      color: #555;
+    }
+
+    .item-price {
+      font-weight: bold;
+      font-size: 1rem;
+      margin-top: 0.3rem;
+    }
+
+  </style>
+</head>
+<body>
+  <header>
+    <h1> Menu</h1>
+  </header>
+
+  <div class="container">
+    <h2 class="section-title">Savoury Items</h2>
+    <div class="menu-grid">
+
+      <div class="item">
+        <img src="samosa.webp" />
+        <div class="item-content">
+          <p class="item-title">Samosa</p>
+          <p class="item-price">₹30</p>
+        </div>
+      </div>
+      
+      <div class="item">
+        <img src="kachori.webp" />
+        <div class="item-content">
+          <p class="item-title">Kachori</p>
+          <p class="item-price">₹30</p>
+        </div>
+      </div>
+     </div>
+    <div class="menu-grid">        
+      <div class="item">
+        <img src="puff.webp" />
+        <div class="item-content">
+          <p class="item-title">Puff</p>
+          <p class="item-price">₹20</p>
+        </div>
+      </div>
+      
+      <div class="item">
+        <img src="cheese_puff.webp" />
+        <div class="item-content">
+          <p class="item-title">Cheese Puff</p>
+          <p class="item-price">₹30</p>
+        </div>
+      </div>
+    </div>
+  <div class="menu-grid">
+      <div class="item">
+        <img src="maggi.webp" />
+        <div class="item-content">
+          <p class="item-title">Maggi</p>
+          <p class="item-price">₹30</p>
+        </div>
+      </div>
+      <div class="item">
+        <img src="cheese_maggi.webp" />
+        <div class="item-content">
+          <p class="item-title">Cheese Maggi</p>
+          <p class="item-price">₹40</p>
+        </div>
+      </div>
+  </div>
+  <h2 class="section-title">Icecreams</h2>
+  <div class="menu-grid">
+      <div class="item">
+        <img src="orange_popsicle.webp" />
+        <div class="item-content">
+          <p class="item-title">orange popsicle</p>
+          <p class="item-price">₹10</p>
+        </div>
+      </div>
+      <div class="item">
+        <img src="chocobar.webp" />
+        <div class="item-content">
+          <p class="item-title">chocobar</p>
+          <p class="item-price">₹20</p>
+        </div>
+      </div>
+      <div class="item">
+        <img src="cone.webp" />
+        <div class="item-content">
+          <p class="item-title">Cone Icecream</p>
+          <p class="item-price">₹40</p>
+        </div>
+      </div>
+  </div>
+  <h2 class="section-title">Drinks</h2>
+  <div class="menu-grid">
+      <div class="item">
+        <img src="fanta.webp" />
+        <div class="item-content">
+          <p class="item-title">Fanta</p>
+          <p class="item-price">₹45</p>
+        </div>
+      </div>
+      <div class="item">
+        <img src="coca.webp" />
+        <div class="item-content">
+          <p class="item-title">Coca cola</p>
+          <p class="item-price">₹60</p>
+        </div>
+      </div>
+      <div class="item">
+        <img src="sprite.webp" />
+        <div class="item-content">
+          <p class="item-title">Sprite</p>
+          <p class="item-price">₹40</p>
+        </div>
+      </div>
+  </div>
+</body>
+</html>

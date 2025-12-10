@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Canteen Craze Express</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+    <script src="https://unpkg.com/feather-icons"></script>
+    <script src="components/navbar.js"></script>
+    <script src="components/footer.js"></script>
+    <style>
+        /* Modal styles for date selection */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+        
+        .modal-content {
+            background-color: white;
+            margin: 10% auto;
+            padding: 30px;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        }
+        
+        .date-selection {
+            margin: 20px 0;
+        }
+        
+        .date-selection label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #4f46e5;
+        }
+        
+        .date-selection input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+        
+        .date-selection input:focus {
+            outline: none;
+            border-color: #4f46e5;
+        }
+        
+        .modal-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 24px;
+        }
+        
+        .modal-buttons button {
+            flex: 1;
+            padding: 12px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        #confirmDateBtn {
+            background-color: #4f46e5;
+            color: white;
+            border: none;
+        }
+        
+        #confirmDateBtn:hover {
+            background-color: #4338ca;
+        }
+        
+        #cancelDateBtn {
+            background-color: #f3f4f6;
+            color: #374151;
+            border: 1px solid #d1d5db;
+        }
+        
+        #cancelDateBtn:hover {
+            background-color: #e5e7eb;
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .modal-header h2 {
+            color: #1f2937;
+            font-size: 24px;
+            font-weight: 700;
+        }
+        
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 28px;
+            cursor: pointer;
+            color: #6b7280;
+            line-height: 1;
+        }
+        
+        .close-modal:hover {
+            color: #374151;
+        }
+        
+        .date-note {
+            margin-top: 10px;
+            font-size: 14px;
+            color: #6b7280;
+            font-style: italic;
+        }
+        
+        /* Advance booking card styles */
+        .advance-booking-card {
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .advance-booking-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+    </style>
+</head>
+<body class="bg-gray-50">    
+    <main class="container mx-auto px-4 py-8">
+        <!-- Hero Section -->
+        <section class="text-center py-12">
+            <h1 class="text-4xl font-bold text-indigo-700 mb-4">MBA Canteen Online</h1>
+            <p class="text-xl text-gray-600 max-w-2xl mx-auto">Order your favorite meals with just a few taps. Pay online.</p>
+            <div class="mt-8">
+                <a href="menur.html" class="bg-indigo-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-indigo-700 transition duration-300">Browse Menu</a>
+            </div>
+        </section>
+
+        <!-- Features Grid -->
+        <section class="grid md:grid-cols-3 gap-8 my-12">
+            <div class="bg-white p-6 rounded-xl shadow-md text-center">
+                <i data-feather="clock" class="w-12 h-12 text-indigo-600 mx-auto mb-4"></i>
+                <h3 class="text-xl font-semibold mb-2">Quick Ordering</h3>
+                <p class="text-gray-600">Order your meals in seconds and skip the queue.</p>
+            </div>
+            <div class="bg-white p-6 rounded-xl shadow-md text-center">
+                <i data-feather="credit-card" class="w-12 h-12 text-indigo-600 mx-auto mb-4"></i>
+                <h3 class="text-xl font-semibold mb-2">Online Payments</h3>
+                <p class="text-gray-600">Secure online payments.</p>
+            </div>
+            <div class="bg-white p-6 rounded-xl shadow-md text-center advance-booking-card" id="advanceBookingCard">
+                <i data-feather="calendar" class="w-12 h-12 text-indigo-600 mx-auto mb-4"></i>
+                <h3 class="text-xl font-semibold mb-2">Advance Booking</h3>
+                <p class="text-gray-600">Book your meals in advance for bulk orders.</p>
+            </div>
+        </section>
+
+        <!-- CTA Section -->
+        <section class="bg-indigo-700 text-white rounded-xl p-8 text-center my-12">
+            <h2 class="text-2xl font-bold mb-4">Ready to order?</h2>
+            <p class="mb-6 max-w-2xl mx-auto">Join thousands of students who enjoy hassle-free canteen ordering.</p>
+            <a href="register.html" class="bg-white text-indigo-700 px-6 py-3 rounded-lg font-medium hover:bg-gray-100 transition duration-300">Get Started</a>
+        </section>
+    </main>
+    
+    <!-- Date Selection Modal -->
+    <div id="dateModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Select Delivery Date</h2>
+                <button class="close-modal" id="closeModal">&times;</button>
+            </div>
+            <p class="text-gray-600 mb-4">Choose the date for your advance booking. You can select any date from tomorrow onwards.</p>
+            
+            <div class="date-selection">
+                <label for="deliveryDate">Select Date:</label>
+                <input type="date" id="deliveryDate" min="">
+                <p class="date-note">Note: Advance booking is available for dates up to 30 days from today</p>
+            </div>
+            
+            <div class="modal-buttons">
+                <button id="confirmDateBtn">Continue to Registration</button>
+                <button id="cancelDateBtn">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        feather.replace();
+        
+        // Set minimum date for date picker (tomorrow)
+        document.addEventListener('DOMContentLoaded', function() {
+            const tomorrow = new Date();
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            const maxDate = new Date();
+            maxDate.setDate(maxDate.getDate() + 30);
+            
+            const formattedMinDate = tomorrow.toISOString().split('T')[0];
+            const formattedMaxDate = maxDate.toISOString().split('T')[0];
+            
+            const dateInput = document.getElementById('deliveryDate');
+            dateInput.min = formattedMinDate;
+            dateInput.max = formattedMaxDate;
+            dateInput.value = formattedMinDate; // Default to tomorrow
+            
+            // Get modal elements
+            const modal = document.getElementById('dateModal');
+            const closeModal = document.getElementById('closeModal');
+            const cancelBtn = document.getElementById('cancelDateBtn');
+            const confirmBtn = document.getElementById('confirmDateBtn');
+            const advanceBookingCard = document.getElementById('advanceBookingCard');
+            
+            // Open modal when advance booking card is clicked
+            advanceBookingCard.addEventListener('click', function() {
+                modal.style.display = 'block';
+            });
+            
+            // Close modal when X is clicked
+            closeModal.addEventListener('click', function() {
+                modal.style.display = 'none';
+            });
+            
+            // Close modal when cancel button is clicked
+            cancelBtn.addEventListener('click', function() {
+                modal.style.display = 'none';
+            });
+            
+            // Close modal when clicking outside the modal content
+            window.addEventListener('click', function(event) {
+                if (event.target === modal) {
+                    modal.style.display = 'none';
+                }
+            });
+            
+            // Handle date confirmation and redirect to register.html with date parameter
+            confirmBtn.addEventListener('click', function() {
+                const selectedDate = document.getElementById('deliveryDate').value;
+                if (selectedDate) {
+                    // Save the selected date to localStorage and sessionStorage
+                    localStorage.setItem('advanceBookingDate', selectedDate);
+                    localStorage.setItem('isAdvanceBooking', 'true');
+                    
+                    // Also store in sessionStorage for immediate use
+                    sessionStorage.setItem('advanceBookingDate', selectedDate);
+                    sessionStorage.setItem('isAdvanceBooking', 'true');
+                    
+                    // Redirect to register page
+                    window.location.href = 'register.html';
+                }
+            });
+        });
+    </script>
+    <script src="script.js"></script>
+</body>
+</html>

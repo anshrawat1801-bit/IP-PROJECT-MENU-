@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Invoice | MBA Canteen</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+      background: #f9f9f9;
+      color: #333;
+      line-height: 1.6;
+    }
+
+    .invoice-container {
+      max-width: 800px;
+      margin: 0 auto;
+      background: white;
+      min-height: 100vh;
+    }
+
+    .header {
+      padding: 40px;
+      background: white;
+      border-bottom: 1px solid #eee;
+      text-align: center;
+    }
+
+    .header h1 {
+      font-size: 2.2rem;
+      font-weight: 300;
+      letter-spacing: 1px;
+      margin-bottom: 8px;
+      color: #2c3e50;
+    }
+
+    .header p {
+      color: #666;
+      font-size: 0.95rem;
+    }
+
+    .invoice-content {
+      padding: 40px;
+    }
+
+    .order-info {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 40px;
+      padding-bottom: 30px;
+      border-bottom: 1px solid #eee;
+    }
+
+    .info-block h3 {
+      font-size: 1rem;
+      font-weight: 500;
+      margin-bottom: 10px;
+      color: #666;
+    }
+
+    .info-block p {
+      font-size: 1.1rem;
+      color: #333;
+    }
+
+    .items-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 40px;
+    }
+
+    .items-table thead {
+      border-bottom: 2px solid #eee;
+    }
+
+    .items-table th {
+      text-align: left;
+      padding: 16px 0;
+      font-weight: 500;
+      color: #666;
+      font-size: 0.9rem;
+    }
+
+    .items-table td {
+      padding: 16px 0;
+      border-bottom: 1px solid #f5f5f5;
+    }
+
+    .items-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .item-name {
+      font-weight: 400;
+    }
+
+    .item-qty, .item-price {
+      color: #666;
+    }
+
+    .item-total {
+      font-weight: 500;
+      color: #333;
+    }
+
+    .totals-section {
+      background: #fafafa;
+      padding: 30px;
+      border-radius: 8px;
+      margin-bottom: 40px;
+    }
+
+    .total-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 16px;
+      font-size: 1rem;
+    }
+
+    .total-row:last-child {
+      margin-bottom: 0;
+    }
+
+    .total-label {
+      color: #666;
+    }
+
+    .total-value {
+      font-weight: 400;
+    }
+
+    .grand-total {
+      font-size: 1.3rem;
+      font-weight: 500;
+      padding-top: 20px;
+      border-top: 2px solid #eee;
+      margin-top: 20px;
+      color: #2c3e50;
+    }
+
+    .thank-you {
+      text-align: center;
+      padding: 40px;
+      border-top: 1px solid #eee;
+      margin-top: 40px;
+    }
+
+    .thank-you h3 {
+      font-size: 1.3rem;
+      font-weight: 400;
+      margin-bottom: 10px;
+      color: #2c3e50;
+    }
+
+    .thank-you p {
+      color: #666;
+      margin-bottom: 20px;
+    }
+
+    .actions {
+      display: flex;
+      gap: 15px;
+      justify-content: center;
+      margin-top: 30px;
+    }
+
+    .btn {
+      padding: 14px 32px;
+      border: none;
+      border-radius: 6px;
+      font-size: 0.95rem;
+      font-weight: 400;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-primary {
+      background: #2c3e50;
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: #1a252f;
+    }
+
+    .btn-secondary {
+      background: #f0f0f0;
+      color: #333;
+      border: 1px solid #ddd;
+    }
+
+    .btn-secondary:hover {
+      background: #e5e5e5;
+    }
+
+    .empty-cart {
+      text-align: center;
+      padding: 80px 40px;
+    }
+
+    .empty-cart h2 {
+      font-size: 1.5rem;
+      font-weight: 400;
+      margin-bottom: 20px;
+      color: #666;
+    }
+
+    .empty-cart p {
+      color: #888;
+      margin-bottom: 30px;
+    }
+
+    .order-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 16px;
+      background: #e8f5e8;
+      color: #2e7d32;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      margin-top: 10px;
+    }
+
+    .order-status i {
+      font-size: 0.8rem;
+    }
+
+    .contact-info {
+      text-align: center;
+      margin-top: 30px;
+      color: #888;
+      font-size: 0.9rem;
+    }
+
+    @media print {
+      body {
+        background: white;
+      }
+      
+      .actions {
+        display: none;
+      }
+      
+      .btn {
+        display: none;
+      }
+      
+      .invoice-container {
+        max-width: 100%;
+        box-shadow: none;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .header {
+        padding: 30px 20px;
+      }
+      
+      .invoice-content {
+        padding: 30px 20px;
+      }
+      
+      .order-info {
+        flex-direction: column;
+        gap: 20px;
+      }
+      
+      .items-table th,
+      .items-table td {
+        padding: 12px 0;
+      }
+      
+      .actions {
+        flex-direction: column;
+        align-items: center;
+      }
+      
+      .btn {
+        width: 100%;
+        justify-content: center;
+      }
+    }
+  </style>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+  <div class="invoice-container">
+    <div class="header">
+      <h1>MBA Canteen</h1>
+      <p>Order Invoice</p>
+    </div>
+
+    <div id="billContent">
+      <!-- Bill content will be generated here -->
+    </div>
+  </div>
+  <!-- Add this where you want to show order details -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const orderData = JSON.parse(localStorage.getItem('orderData'));
+        
+        if (orderData && orderData.isAdvanceBooking) {
+            // Create a section to show advance booking info
+            const advanceBookingSection = document.createElement('div');
+            advanceBookingSection.className = 'bg-indigo-50 p-4 rounded-lg mb-6';
+            advanceBookingSection.innerHTML = `
+                <h3 class="font-bold text-indigo-800 mb-2">📅 Advance Booking Details</h3>
+                <p class="text-indigo-600">
+                    Scheduled Delivery Date: <span class="font-bold">${new Date(orderData.deliveryDate).toLocaleDateString('en-US', {
+                        weekday: 'long',
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric'
+                    })}</span>
+                </p>
+            `;
+            
+            // Insert it near the order summary
+            const orderSummary = document.querySelector('.order-summary-class') || document.body;
+            orderSummary.insertBefore(advanceBookingSection, orderSummary.firstChild);
+        }
+    });
+</script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const billContent = document.getElementById('billContent');
+      const orderData = JSON.parse(localStorage.getItem('orderData'));
+      
+      // Generate a random order ID
+      const orderId = 'MBA-' + Math.floor(Math.random() * 10000).toString().padStart(4, '0');
+      const orderDate = new Date().toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+      });
+
+      if (!orderData || !orderData.items || Object.keys(orderData.items).length === 0) {
+        billContent.innerHTML = `
+          <div class="empty-cart">
+            <h2>No items in your order</h2>
+            <p>Your cart is empty. Please go back and add some items.</p>
+            <div class="actions">
+              <a href="menur.html" class="btn btn-primary">
+                <i class="fas fa-arrow-left"></i>
+                Back to Menu
+              </a>
+            </div>
+          </div>
+        `;
+        return;
+      }
+
+      let itemsHTML = '';
+      let subtotal = 0;
+      const items = orderData.items;
+
+      // Build items table
+      for (let itemName in items) {
+        const item = items[itemName];
+        const itemTotal = item.price * item.qty;
+        subtotal += itemTotal;
+        
+        itemsHTML += `
+          <tr>
+            <td class="item-name">${itemName}</td>
+            <td class="item-qty">${item.qty}</td>
+            <td class="item-price">₹${item.price}</td>
+            <td class="item-total">₹${itemTotal}</td>
+          </tr>
+        `;
+      }
+
+      // Get user data if available
+      const userData = JSON.parse(localStorage.getItem('userData')) || {};
+      const userName = userData.name || 'Guest';
+      
+      // Only subtotal (no GST, service charges, or packaging)
+      const grandTotal = subtotal;
+
+      billContent.innerHTML = `
+        <div class="invoice-content">
+          <div class="order-info">
+            <div class="info-block">
+              <h3>Order Number</h3>
+              <p>${orderId}</p>
+            </div>
+            <div class="info-block">
+              <h3>Date</h3>
+              <p>${orderDate}</p>
+            </div>
+            <div class="info-block">
+              <h3>Customer</h3>
+              <p>${userName}</p>
+            </div>
+          </div>
+
+          <table class="items-table">
+            <thead>
+              <tr>
+                <th>Item</th>
+                <th>Quantity</th>
+                <th>Price</th>
+                <th>Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${itemsHTML}
+            </tbody>
+          </table>
+
+          <div class="totals-section">
+            <div class="total-row grand-total">
+              <span class="total-label">Total Amount</span>
+              <span class="total-value">₹${grandTotal.toFixed(2)}</span>
+            </div>
+          </div>
+
+          <div class="order-status">
+            <i class="fas fa-clock"></i>
+            <span>Order Status: Will be ready for Pickup in 10-15 minutes</span>
+          </div>
+
+          <div class="contact-info">
+            <p>For any queries, contact: canteen@mbacollege.gnu </p>
+          </div>
+
+          <div class="thank-you">
+            <h3>Thank you for your order!</h3>
+            <p>Your order will be ready in 10-15 minutes. Please collect from counter.</p>
+            
+            <div class="actions">
+              <button onclick="window.print()" class="btn btn-primary">
+                <i class="fas fa-print"></i>
+                Print Invoice
+              </button>
+              <a href="menur.html" class="btn btn-secondary">
+                <i class="fas fa-utensils"></i>
+                Order More
+              </a>
+            </div>
+          </div>
+        </div>
+      `;
+
+      // Clear the cart after displaying bill
+      localStorage.removeItem('orderData');
+    });
+
+    // Print functionality
+    window.addEventListener('beforeprint', function() {
+      document.body.style.background = 'white';
+    });
+  </script>
+</body>
+</html>

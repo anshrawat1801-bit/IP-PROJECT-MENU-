@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Restaurant Menu</title>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      background: #f7f7f7;
+    }
+
+    header {
+      text-align: center;
+      padding: 1.5rem;
+      background: white;
+      border-bottom: 1px solid #ddd;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 2.5rem;
+      font-weight: 700;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: auto;
+      padding: 1rem;
+      padding-bottom: 4rem;
+    }
+
+    .section-title {
+      margin-top: 2rem;
+      font-size: 1.8rem;
+      font-weight: bold;
+    }
+
+    /* GRID LIKE ZOMATO/SWIGGY */
+    .menu-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+      margin-top: 1rem;
+    }
+
+    .item {
+      background: white;
+      border-radius: 12px;
+      padding-bottom: 1rem;
+      border: 1px solid #eee;
+      cursor: pointer;
+      transition: 0.2s ease;
+    }
+
+    .item:hover {
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      transform: translateY(-2px);
+    }
+
+    .item img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+      border-radius: 12px 12px 0 0;
+    }
+
+    .item-content {
+      padding: 1rem;
+    }
+
+    .item-title {
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin: 0;
+    }
+
+    .item-price {
+      margin-top: 0.5rem;
+      font-weight: bold;
+      font-size: 1rem;
+      color: #333;
+    }
+
+    /* CART PANEL */
+    #cartPanel {
+      position: fixed;
+      top: 0;
+      right: -400px;
+      width: 350px;
+      height: 100vh;
+      background: #fff;
+      border-left: 2px solid #000;
+      padding: 1rem;
+      box-shadow: -4px 0 20px rgba(0,0,0,0.2);
+      transition: 0.35s ease;
+      overflow-y: auto;
+      z-index: 999;
+    }
+
+    #cartPanel.open {
+      right: 0;
+    }
+
+    .cart-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.7rem 0;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .cart-controls {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .cart-controls button {
+      padding: 0.3rem 0.8rem;
+      cursor: pointer;
+      background: #f0f0f0;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    #cartTotal {
+      margin-top: 1rem;
+      padding-top: 1rem;
+      border-top: 2px solid #333;
+      font-weight: bold;
+      font-size: 1.2rem;
+    }
+
+    #continueBtn {
+      margin-top: 1.2rem;
+      width: 100%;
+      padding: 0.8rem;
+      background: black;
+      color: white;
+      font-size: 1rem;
+      border: none;
+      cursor: pointer;
+      border-radius: 6px;
+    }
+
+    #continueBtn:hover {
+      background: #333;
+    }
+
+    .cart-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+
+    #closeCart {
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+    }
+
+  </style>
+
+</head>
+<body>
+<!-- Advance Booking Banner for Menu Page -->
+<div id="advanceBookingBanner" style="display: none;" class="bg-gradient-to-r from-indigo-500 to-purple-600 text-white p-4 shadow-lg">
+    <div class="container mx-auto px-4">
+        <div class="flex flex-col md:flex-row md:items-center justify-between">
+            <div class="flex items-center mb-2 md:mb-0">
+                <div>
+                    <h3 class="font-bold text-xl">Advance Booking Mode</h3>
+                    <p class="text-indigo-100">Your order is scheduled for delivery on: 
+                        <span id="selectedDateDisplay" class="font-bold text-yellow-300"></span>
+                    </p>
+                </div>
+            </div>
+            <div class="flex items-center space-x-4">
+                <button onclick="changeAdvanceBookingDate()" class="bg-white text-indigo-600 px-4 py-2 rounded-lg font-medium hover:bg-gray-100 transition duration-300">
+                    Change Date
+                </button>
+                <button onclick="cancelAdvanceBooking()" class="bg-transparent border-2 border-white text-white px-4 py-2 rounded-lg font-medium hover:bg-white hover:text-indigo-600 transition duration-300">
+                    Cancel Advance Booking
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Check for advance booking when menu loads
+    document.addEventListener('DOMContentLoaded', function() {
+        const isAdvanceBooking = localStorage.getItem('isAdvanceBooking');
+        const advanceBookingDate = localStorage.getItem('advanceBookingDate');
+        
+        if (isAdvanceBooking === 'true' && advanceBookingDate) {
+            const banner = document.getElementById('advanceBookingBanner');
+            const dateDisplay = document.getElementById('selectedDateDisplay');
+            
+            // Format the date nicely
+            const dateObj = new Date(advanceBookingDate);
+            const formattedDate = dateObj.toLocaleDateString('en-US', {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+            
+            dateDisplay.textContent = formattedDate;
+            banner.style.display = 'block';
+            
+            // Update page title to show it's advance booking
+            document.title = "Menu - Advance Booking | " + document.title;
+            
+            // Update cart functionality to include date info
+            const continueBtn = document.getElementById('continueBtn');
+            if (continueBtn) {
+                continueBtn.onclick = function() {
+                    if (Object.keys(cart).length === 0) {
+                        alert("Your cart is empty! Add some items first.");
+                        return;
+                    }
+                    
+                    let totalAmount = 0;
+                    for (let item in cart) {
+                        totalAmount += cart[item].price * cart[item].qty;
+                    }
+                    
+                    const orderData = {
+                        items: cart,
+                        total: totalAmount,
+                        timestamp: new Date().toLocaleString(),
+                        deliveryDate: advanceBookingDate,
+                        isAdvanceBooking: true,
+                        orderType: 'Advance Booking'
+                    };
+                    
+                    localStorage.setItem("orderData", JSON.stringify(orderData));
+                    window.location.href = "bill.html";
+                };
+            }
+        }
+    });
+    
+    function changeAdvanceBookingDate() {
+        // Store current cart items temporarily
+        const currentCart = cart;
+        localStorage.setItem('tempCart', JSON.stringify(currentCart));
+        
+        // Redirect back to home page to select new date
+        localStorage.removeItem('isAdvanceBooking');
+        localStorage.removeItem('advanceBookingDate');
+        window.location.href = 'index.html';
+    }
+    
+    function cancelAdvanceBooking() {
+        // Clear advance booking data
+        localStorage.removeItem('isAdvanceBooking');
+        localStorage.removeItem('advanceBookingDate');
+        sessionStorage.removeItem('isAdvanceBooking');
+        sessionStorage.removeItem('advanceBookingDate');
+        
+        // Hide the banner
+        document.getElementById('advanceBookingBanner').style.display = 'none';
+        
+        // Reset cart functionality to normal
+        const continueBtn = document.getElementById('continueBtn');
+        if (continueBtn) {
+            continueBtn.onclick = function() {
+                if (Object.keys(cart).length === 0) {
+                    alert("Your cart is empty! Add some items first.");
+                    return;
+                }
+                
+                let totalAmount = 0;
+                for (let item in cart) {
+                    totalAmount += cart[item].price * cart[item].qty;
+                }
+                
+                const orderData = {
+                    items: cart,
+                    total: totalAmount,
+                    timestamp: new Date().toLocaleString(),
+                    orderType: 'Regular Order'
+                };
+                
+                localStorage.setItem("orderData", JSON.stringify(orderData));
+                window.location.href = "bill.html";
+            };
+        }
+        
+        alert("Advance booking cancelled. You can now order for immediate delivery.");
+    }
+</script>
+<header>
+  <h1>Menu</h1>
+</header>
+
+<div class="container">
+
+  <h2 class="section-title">Savoury Items</h2>
+  <div class="menu-grid">
+
+    <div class="item" onclick="addToCart('Samosa', 30)">
+      <img src="samosa.webp">
+      <div class="item-content">
+        <p class="item-title">Samosa</p>
+        <p class="item-price">₹30</p>
+      </div>
+    </div>
+
+    <div class="item" onclick="addToCart('Kachori', 30)">
+      <img src="kachori.webp">
+      <div class="item-content">
+        <p class="item-title">Kachori</p>
+        <p class="item-price">₹30</p>
+      </div>
+    </div>
+
+    <div class="item" onclick="addToCart('Puff', 20)">
+      <img src="puff.webp">
+      <div class="item-content">
+        <p class="item-title">Puff</p>
+        <p class="item-price">₹20</p>
+      </div>
+    </div>
+
+    <div class="item" onclick="addToCart('Cheese Puff', 30)">
+      <img src="cheese_puff.webp">
+      <div class="item-content">
+        <p class="item-title">Cheese Puff</p>
+        <p class="item-price">₹30</p>
+      </div>
+    </div>
+
+  </div>
+
+  <h2 class="section-title">Maggi</h2>
+  <div class="menu-grid">
+
+    <div class="item" onclick="addToCart('Maggi', 30)">
+      <img src="maggi.webp">
+      <div class="item-content">
+        <p class="item-title">Maggi</p>
+        <p class="item-price">₹30</p>
+      </div>
+    </div>
+
+    <div class="item" onclick="addToCart('Cheese Maggi', 40)">
+      <img src="cheese_maggi.webp">
+      <div class="item-content">
+        <p class="item-title">Cheese Maggi</p>
+        <p class="item-price">₹40</p>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- NEW COLD DRINKS SECTION -->
+  <h2 class="section-title">Cold Drinks</h2>
+  <div class="menu-grid">
+
+    <div class="item" onclick="addToCart('Pepsi', 50)">
+      <img src="pepsi.webp">
+      <div class="item-content">
+        <p class="item-title">Pepsi</p>
+        <p class="item-price">₹50</p>
+      </div>
+    </div>
+
+    <div class="item" onclick="addToCart('Coca Cola', 50)">
+      <img src="coca.webp">
+      <div class="item-content">
+        <p class="item-title">Coca Cola</p>
+        <p class="item-price">₹50</p>
+      </div>
+    </div>
+
+    <div class="item" onclick="addToCart('Sprite', 45)">
+      <img src="sprite.webp">
+      <div class="item-content">
+        <p class="item-title">Sprite</p>
+        <p class="item-price">₹45</p>
+      </div>
+    </div>
+
+    <div class="item" onclick="addToCart('Mountain Dew', 55)">
+      <img src="mountain_dew.webp">
+      <div class="item-content">
+        <p class="item-title">Mountain Dew</p>
+        <p class="item-price">₹55</p>
+      </div>
+    </div>
+
+  </div>
+
+  <h2 class="section-title">Icecreams</h2>
+  <div class="menu-grid">
+
+    <div class="item" onclick="addToCart('Orange Popsicle', 10)">
+      <img src="orange_popsicle.webp">
+      <div class="item-content">
+        <p class="item-title">Orange Popsicle</p>
+        <p class="item-price">₹10</p>
+      </div>
+    </div>
+
+    <div class="item" onclick="addToCart('Chocobar', 20)">
+      <img src="chocobar.webp">
+      <div class="item-content">
+        <p class="item-title">Chocobar</p>
+        <p class="item-price">₹20</p>
+      </div>
+    </div>
+
+    <div class="item" onclick="addToCart('Cone Icecream', 40)">
+      <img src="cone.webp">
+      <div class="item-content">
+        <p class="item-title">Cone Icecream</p>
+        <p class="item-price">₹40</p>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+<!-- CART PANEL -->
+<div id="cartPanel">
+  <div class="cart-header">
+    <h2>Your Order</h2>
+    <button id="closeCart">×</button>
+  </div>
+  <div id="cartItems"></div>
+  <div id="cartTotal">Total: ₹0</div>
+  <button id="continueBtn">Continue to Checkout</button>
+</div>
+
+<script>
+  const cart = {};
+  const cartPanel = document.getElementById("cartPanel");
+  const cartItemsDiv = document.getElementById("cartItems");
+  const cartTotalDiv = document.getElementById("cartTotal");
+  const closeCartBtn = document.getElementById("closeCart");
+
+  function addToCart(name, price) {
+    if (!cart[name]) {
+      cart[name] = { price, qty: 1 };
+    } else {
+      cart[name].qty++;
+    }
+
+    updateCart();
+    cartPanel.classList.add("open");
+  }
+
+  function updateCart() {
+    cartItemsDiv.innerHTML = "";
+
+    let totalItems = 0;
+    let totalAmount = 0;
+    
+    for (let item in cart) {
+      totalItems += cart[item].qty;
+      const c = cart[item];
+      const itemTotal = c.price * c.qty;
+      totalAmount += itemTotal;
+
+      const itemDiv = document.createElement("div");
+      itemDiv.className = "cart-item";
+      itemDiv.innerHTML = `
+        <span>${item} (₹${c.price})</span>
+        <div class="cart-controls">
+          <button onclick="changeQty('${item}', -1)">-</button>
+          <span>${c.qty}</span>
+          <button onclick="changeQty('${item}', 1)">+</button>
+        </div>
+      `;
+      cartItemsDiv.appendChild(itemDiv);
+    }
+
+    cartTotalDiv.textContent = `Total: ₹${totalAmount}`;
+
+    if (totalItems === 0) {
+      cartPanel.classList.remove("open");
+    }
+  }
+
+  function changeQty(item, amount) {
+    cart[item].qty += amount;
+    if (cart[item].qty <= 0) delete cart[item];
+    updateCart();
+  }
+
+  // Close cart panel
+  closeCartBtn.onclick = () => {
+    cartPanel.classList.remove("open");
+  };
+
+  // Continue to bill page
+  document.getElementById("continueBtn").onclick = () => {
+    if (Object.keys(cart).length === 0) {
+      alert("Your cart is empty! Add some items first.");
+      return;
+    }
+    
+    // Calculate total
+    let totalAmount = 0;
+    for (let item in cart) {
+      totalAmount += cart[item].price * cart[item].qty;
+    }
+    
+    // Save order data to localStorage
+    const orderData = {
+      items: cart,
+      total: totalAmount,
+      timestamp: new Date().toLocaleString()
+    };
+    
+    localStorage.setItem("orderData", JSON.stringify(orderData));
+    window.location.href = "bill.html";
+  };
+</script>
+
+</body>
+</html>

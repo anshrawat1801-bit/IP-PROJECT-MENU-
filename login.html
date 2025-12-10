@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login | MBA Canteen</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+      background: #fafafa;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 400px;
+      padding: 0 20px;
+    }
+
+    .logo {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .logo h1 {
+      font-size: 2.5rem;
+      font-weight: 300;
+      letter-spacing: 1px;
+      color: #333;
+      margin-bottom: 8px;
+    }
+
+    .logo p {
+      color: #666;
+      font-size: 0.9rem;
+      font-weight: 300;
+    }
+
+    .card {
+      background: white;
+      padding: 40px;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+      border: 1px solid #eee;
+    }
+
+    .card h2 {
+      font-size: 1.5rem;
+      font-weight: 400;
+      color: #333;
+      margin-bottom: 30px;
+      text-align: center;
+    }
+
+    .form-group {
+      margin-bottom: 24px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      color: #555;
+      font-size: 0.9rem;
+      font-weight: 400;
+    }
+
+    .input-wrapper {
+      position: relative;
+    }
+
+    .input-wrapper i {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #999;
+      font-size: 0.9rem;
+    }
+
+    input {
+      width: 100%;
+      padding: 14px 14px 14px 42px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      background: #fff;
+      color: #333;
+      transition: all 0.2s ease;
+    }
+
+    input:focus {
+      outline: none;
+      border-color: #333;
+      box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.05);
+    }
+
+    .password-toggle {
+      position: absolute;
+      right: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      color: #999;
+      cursor: pointer;
+      font-size: 0.9rem;
+      padding: 0;
+    }
+
+    .login-btn {
+      width: 100%;
+      padding: 14px;
+      background: #333;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      font-weight: 400;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      margin-top: 10px;
+      letter-spacing: 0.5px;
+    }
+
+    .login-btn:hover {
+      background: #000;
+    }
+
+    .login-btn:active {
+      transform: translateY(1px);
+    }
+
+    .login-btn i {
+      margin-right: 8px;
+    }
+
+    .error-message {
+      color: #d32f2f;
+      font-size: 0.8rem;
+      margin-top: 5px;
+      display: none;
+    }
+
+    input.error {
+      border-color: #d32f2f;
+    }
+
+    .register-link {
+      text-align: center;
+      margin-top: 20px;
+      padding-top: 20px;
+      border-top: 1px solid #eee;
+      color: #666;
+      font-size: 0.9rem;
+    }
+
+    .register-link a {
+      color: #333;
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.2s ease;
+    }
+
+    .register-link a:hover {
+      color: #000;
+      text-decoration: underline;
+    }
+
+    /* Advance booking banner styles */
+    .advance-booking-banner {
+      background: #eef2ff;
+      border-left: 4px solid #4f46e5;
+      border-radius: 8px;
+      padding: 16px;
+      margin-bottom: 24px;
+    }
+
+    .advance-booking-banner .banner-content {
+      display: flex;
+      align-items: flex-start;
+    }
+
+    .advance-booking-banner svg {
+      flex-shrink: 0;
+      width: 24px;
+      height: 24px;
+      color: #4f46e5;
+      margin-right: 12px;
+      margin-top: 2px;
+    }
+
+    .advance-booking-banner h3 {
+      color: #3730a3;
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .advance-booking-banner p {
+      color: #4f46e5;
+      font-size: 0.9rem;
+      margin-bottom: 2px;
+    }
+
+    .advance-booking-banner .date-display {
+      color: #3730a3;
+      font-weight: 600;
+    }
+
+    .advance-booking-banner .note {
+      color: #6b7280;
+      font-size: 0.8rem;
+      font-style: italic;
+      margin-top: 4px;
+    }
+
+    .cancel-booking-btn {
+      margin-top: 12px;
+      padding: 8px 16px;
+      background: #f3f4f6;
+      color: #4b5563;
+      border: 1px solid #d1d5db;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .cancel-booking-btn:hover {
+      background: #e5e7eb;
+    }
+
+    /* Remember me checkbox */
+    .remember-me {
+      display: flex;
+      align-items: center;
+      margin-bottom: 24px;
+    }
+
+    .remember-me input {
+      width: auto;
+      margin-right: 8px;
+      transform: scale(1.1);
+    }
+
+    .remember-me label {
+      color: #555;
+      font-size: 0.9rem;
+      cursor: pointer;
+    }
+
+    @media (max-width: 480px) {
+      .card {
+        padding: 30px 25px;
+      }
+      
+      .container {
+        padding: 0 15px;
+      }
+    }
+  </style>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+
+  <div class="container">
+    <div class="logo">
+      <h1>MBA Canteen</h1>
+      <p>Simple, delicious, delivered</p>
+    </div>
+
+    <div class="card">
+      <h2>Sign In</h2>
+      
+      <form id="loginForm">
+        <div class="form-group">
+          <label for="email">Email Address</label>
+          <div class="input-wrapper">
+            <i class="fas fa-envelope"></i>
+            <input type="email" id="email" placeholder="you@example.com" required />
+          </div>
+          <div class="error-message" id="emailError">Please enter a valid email</div>
+        </div>
+
+        <div class="form-group">
+          <label for="password">Password</label>
+          <div class="input-wrapper">
+            <i class="fas fa-lock"></i>
+            <input type="password" id="password" placeholder="Enter your password" required />
+            <button type="button" class="password-toggle" onclick="togglePassword()">
+              <i class="far fa-eye"></i>
+            </button>
+          </div>
+          <div class="error-message" id="passwordError">Please enter your password</div>
+        </div>
+
+        <div class="remember-me">
+          <input type="checkbox" id="remember" />
+          <label for="remember">Remember me</label>
+        </div>
+
+        <button type="submit" class="login-btn">
+          <i class="fas fa-sign-in-alt"></i>
+          Sign In
+        </button>
+      </form>
+
+      <div class="register-link">
+        Don't have an account? <a href="register.html">Create account</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Check if user came from advance booking
+        const isAdvanceBooking = localStorage.getItem('isAdvanceBooking') || 
+                                sessionStorage.getItem('isAdvanceBooking');
+        const advanceBookingDate = localStorage.getItem('advanceBookingDate') || 
+                                  sessionStorage.getItem('advanceBookingDate');
+        
+        if (isAdvanceBooking === 'true' && advanceBookingDate) {
+            // Create and show advance booking info banner
+            const banner = document.createElement('div');
+            banner.className = 'advance-booking-banner';
+            
+            // Format the date nicely
+            const dateObj = new Date(advanceBookingDate);
+            const formattedDate = dateObj.toLocaleDateString('en-US', {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+            
+            banner.innerHTML = `
+                <div class="banner-content">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                    </svg>
+                    <div>
+                        <h3>Advance Booking Selected</h3>
+                        <p>Your order will be scheduled for: <span class="date-display">${formattedDate}</span></p>
+                        <p class="note">Complete login to proceed with advance booking</p>
+                        <button type="button" class="cancel-booking-btn" onclick="cancelAdvanceBooking()">
+                            Cancel Advance Booking
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            // Insert banner at the top of the card
+            const card = document.querySelector('.card');
+            const cardTitle = document.querySelector('.card h2');
+            card.insertBefore(banner, cardTitle.nextSibling);
+            
+            // Add hidden input fields for advance booking to the form
+            const loginForm = document.getElementById('loginForm');
+            if (loginForm) {
+                const dateInput = document.createElement('input');
+                dateInput.type = 'hidden';
+                dateInput.name = 'advanceBookingDate';
+                dateInput.value = advanceBookingDate;
+                
+                const bookingTypeInput = document.createElement('input');
+                bookingTypeInput.type = 'hidden';
+                bookingTypeInput.name = 'isAdvanceBooking';
+                bookingTypeInput.value = 'true';
+                
+                loginForm.appendChild(dateInput);
+                loginForm.appendChild(bookingTypeInput);
+            }
+        }
+        
+        // Password toggle functionality
+        function togglePassword() {
+          const passwordInput = document.getElementById('password');
+          const toggleIcon = document.querySelector('.password-toggle i');
+          
+          if (passwordInput.type === 'password') {
+            passwordInput.type = 'text';
+            toggleIcon.classList.remove('fa-eye');
+            toggleIcon.classList.add('fa-eye-slash');
+          } else {
+            passwordInput.type = 'password';
+            toggleIcon.classList.remove('fa-eye-slash');
+            toggleIcon.classList.add('fa-eye');
+          }
+        }
+        
+        // Cancel advance booking function
+        window.cancelAdvanceBooking = function() {
+            localStorage.removeItem('isAdvanceBooking');
+            localStorage.removeItem('advanceBookingDate');
+            sessionStorage.removeItem('isAdvanceBooking');
+            sessionStorage.removeItem('advanceBookingDate');
+            
+            const banner = document.querySelector('.advance-booking-banner');
+            if (banner) {
+                banner.remove();
+            }
+            
+            // Remove hidden inputs if they exist
+            const dateInput = document.querySelector('input[name="advanceBookingDate"]');
+            const bookingTypeInput = document.querySelector('input[name="isAdvanceBooking"]');
+            if (dateInput) dateInput.remove();
+            if (bookingTypeInput) bookingTypeInput.remove();
+            
+            alert('Advance booking cancelled. You can still login for regular ordering.');
+        };
+        
+        // Form submission
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+          e.preventDefault();
+          
+          let isValid = true;
+          
+          // Simple validation
+          const email = document.getElementById('email').value.trim();
+          const password = document.getElementById('password').value;
+          
+          // Clear previous errors
+          document.querySelectorAll('.error-message').forEach(el => el.style.display = 'none');
+          document.querySelectorAll('input').forEach(el => el.classList.remove('error'));
+          
+          // Email validation
+          const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+          if (!emailRegex.test(email)) {
+            document.getElementById('emailError').style.display = 'block';
+            document.getElementById('email').classList.add('error');
+            isValid = false;
+          }
+          
+          // Password validation
+          if (password.length < 1) {
+            document.getElementById('passwordError').style.display = 'block';
+            document.getElementById('password').classList.add('error');
+            isValid = false;
+          }
+          
+          if (isValid) {
+            // Check if user exists in localStorage (demo purposes)
+            // In a real app, this would be a server-side check
+            const storedUserData = localStorage.getItem('userData');
+            let userData = null;
+            
+            if (storedUserData) {
+              userData = JSON.parse(storedUserData);
+            }
+            
+            // Demo login logic - accepts any email/password combination
+            // In production, this would verify against a database
+            if (!userData) {
+              // If no user found in localStorage, create demo user data
+              userData = {
+                name: email.split('@')[0], // Use part before @ as name
+                email: email,
+                lastLogin: new Date().toISOString()
+              };
+              localStorage.setItem('userData', JSON.stringify(userData));
+            } else {
+              // Update last login time
+              userData.lastLogin = new Date().toISOString();
+              localStorage.setItem('userData', JSON.stringify(userData));
+            }
+            
+            // Save login state
+            localStorage.setItem('isLoggedIn', 'true');
+            
+            // Check "Remember me" checkbox
+            const rememberMe = document.getElementById('remember').checked;
+            if (rememberMe) {
+              localStorage.setItem('rememberedEmail', email);
+            } else {
+              localStorage.removeItem('rememberedEmail');
+            }
+            
+            // Check if advance booking is active
+            const isAdvanceBooking = localStorage.getItem('isAdvanceBooking');
+            const advanceBookingDate = localStorage.getItem('advanceBookingDate');
+            
+            if (isAdvanceBooking === 'true' && advanceBookingDate) {
+              // Redirect to menu with advance booking
+              window.location.href = `menur.html?name=${encodeURIComponent(userData.name)}&advance=true`;
+            } else {
+              // Redirect to menu normally
+              window.location.href = `menur.html?name=${encodeURIComponent(userData.name)}`;
+            }
+          }
+        });
+        
+        // Remove error on input
+        document.querySelectorAll('input').forEach(input => {
+          input.addEventListener('input', function() {
+            this.classList.remove('error');
+            const errorId = this.id + 'Error';
+            const errorElement = document.getElementById(errorId);
+            if (errorElement) {
+              errorElement.style.display = 'none';
+            }
+          });
+        });
+        
+        // Enter key support
+        document.addEventListener('keypress', function(e) {
+          if (e.key === 'Enter') {
+            document.getElementById('loginForm').dispatchEvent(new Event('submit'));
+          }
+        });
+        
+        // Pre-fill email if remembered
+        const rememberedEmail = localStorage.getItem('rememberedEmail');
+        if (rememberedEmail) {
+          document.getElementById('email').value = rememberedEmail;
+          document.getElementById('remember').checked = true;
+        }
+    });
+  </script>
+
+</body>
+</html>

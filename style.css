@@ -1,0 +1,140 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+body {
+    font-family: 'Inter', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+main {
+    flex: 1;
+}
+
+/* Animation for buttons */
+button, a[role="button"] {
+    transition: all 0.3s ease;
+}
+
+/* Card hover effect */
+.bg-white:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}/* ...existing code... */
+
+/* Lighter CTA and improved contrast */
+:root{
+  --cta-bg: #eef2ff;    /* light indigo */
+  --cta-text: #3730a3;  /* dark indigo for text */
+  --cta-accent: #3730a3;/* button color inside CTA */
+  --footer-bg: #f8fafc; /* very light gray */
+  --footer-text: #0f172a;/* near-black for contrast */
+}
+
+/* Target common CTA/footer patterns; adjust selectors if yours differ */
+/* CTA section (previously dark) */
+main section.bg-indigo-700,
+.section-cta,
+.cta {
+  background-color: var(--cta-bg) !important;
+  color: var(--cta-text) !important;
+  border: 1px solid #e0e7ff;
+  box-shadow: 0 8px 24px rgba(99,102,241,0.06);
+}
+
+/* Ensure headings and body copy inside CTA are readable */
+main section.bg-indigo-700 h1,
+main section.bg-indigo-700 h2,
+main section.bg-indigo-700 p,
+.section-cta h1,
+.section-cta h2,
+.section-cta p,
+.cta h1,
+.cta h2,
+.cta p {
+  color: var(--cta-text) !important;
+}
+
+/* CTA links/buttons: keep accent but ensure contrast */
+main section.bg-indigo-700 a,
+.section-cta a,
+.cta a,
+main section.bg-indigo-700 button,
+.section-cta button,
+.cta button {
+  background-color: var(--cta-accent) !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 12px rgba(55,52,163,0.12);
+  border: none !important;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  text-decoration: none;
+}
+
+/* Light footer with improved spacing and contrast */
+custom-footer,
+footer,
+.site-footer,
+.footer {
+  display: block;
+  background: var(--footer-bg) !important;
+  color: var(--footer-text) !important;
+  padding: 1.25rem 1rem !important;
+  border-top: 1px solid #e6edf3;
+  font-size: 0.95rem;
+}
+
+/* Footer links */
+custom-footer a,
+footer a,
+.site-footer a,
+.footer a {
+  color: var(--footer-text) !important;
+  text-decoration: underline;
+}
+
+/* Small responsive adjustments to preserve spacing */
+@media (max-width: 640px) {
+  main section.bg-indigo-700,
+  .section-cta,
+  .cta {
+    padding: 1.25rem !important;
+  }
+
+  custom-footer,
+  footer,
+  .site-footer,
+  .footer {
+    padding: 1rem !important;
+    font-size: 0.92rem;
+  }
+}
+
+/* Accessibility: increase contrast where text overlays images */
+.text-overlay, .overlay-text {
+  text-shadow: 0 1px 2px rgba(255,255,255,0.6);
+  background: rgba(255,255,255,0.4);
+  padding: 0.1rem 0.35rem;
+  border-radius: 3px;
+}
+
+/* ...existing code... */
